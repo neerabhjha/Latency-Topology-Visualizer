@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { GcpEndpointMap } from '@/types/topology';
+import { useAppDispatch } from '@/store/store';
+import { setMetrics } from '@/store/uiSlice';
 
 function pingImage(url: string, timeoutMs = 4000): Promise<number> {
   return new Promise((resolve) => {
@@ -36,6 +38,8 @@ export function useGcpLatency(pollsEveryMs = 8000) {
   const [latencies, setLatencies] = useState<Record<string, number>>({});
   const [labels, setLabels] = useState<Record<string, string>>({}); // id -> RegionName
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const dispatch = useAppDispatch();
+
 
   async function measure() {
     try {
@@ -63,6 +67,11 @@ export function useGcpLatency(pollsEveryMs = 8000) {
         slice.forEach((e, idx) => { results[e.id] = times[idx]; });
       }
       setLatencies(results);
+      const vals = Object.values(results);
+dispatch(setMetrics({
+  avgLatencyMs: vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : undefined,
+  lastPollAt: Date.now(),
+}));
     } catch (e) {
       console.warn('measure(/api/gcping) failed', e);
     }

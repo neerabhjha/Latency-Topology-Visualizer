@@ -16,6 +16,7 @@ export interface Connection {
     from: { lat: number; lng: number };
     to: { lat: number; lng: number };
     ms: number;
+    meta: any
 }
 
 export default function Globe({
@@ -77,7 +78,7 @@ export default function Globe({
     );
 
     return (
-        <div className="w-full h-[90vh] rounded-2xl overflow-hidden border bg-white dark:bg-black/5 border-white/10">
+        <div className="max-w-[1120px] h-[90vh] rounded-2xl overflow-hidden border bg-white dark:bg-black/5 border-white/10">
             <GlobeGL
                 ref={globeRef}
                 globeImageUrl="https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"

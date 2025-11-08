@@ -2,10 +2,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import latencyReducer from '@/store/latencySlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import uiReducer from '@/store/uiSlice';
 
 
 export const store = configureStore({
-reducer: { latency: latencyReducer }
+    reducer: { latency: latencyReducer, ui: uiReducer  }
 });
 
 
