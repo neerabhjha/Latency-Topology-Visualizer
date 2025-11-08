@@ -80,7 +80,7 @@ export default function ControlPanel() {
       {/* Layer toggles */}
       <div className="space-y-2">
         <div className="text-sm opacity-80">Layers</div>
-        {(['clientArcs','exchangeArcs','regions','realtimePanel','historyPanel'] as const).map(k => (
+        {(['clientArcs','exchangeArcs','regions'] as const).map(k => (
           <label key={k} className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
