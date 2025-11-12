@@ -9,9 +9,35 @@ import { useFps } from '@/hooks/useFps';
 import ControlPanel from '@/components/ControlPanel';
 import PerformanceBar from '@/components/PerformanceBar';
 import StatusCard from '@/components/StatusCard'; // make sure this file exists
+import { useEffect } from "react";
+import mixpanel from "mixpanel-browser";
 
 export default function Home() {
   useFps();
+
+
+  useEffect(() => {
+    mixpanel.init('f91ce5406070d70def8e7ae950c90e92', {
+      autocapture: false,
+      record_sessions_percent: 0,
+      api_host: 'https://api-eu.mixpanel.com',
+    })
+
+    const hasVisited = mixpanel.get_property('hasVisited');
+
+    if (!hasVisited) {
+      mixpanel.track('Website_Visit_First_Time', {
+        timestamp: new Date().toISOString(),
+      });
+
+      // Register super property (sent with every event)
+      mixpanel.register({
+        hasVisited: true,
+        firstVisitDate: new Date().toISOString(),
+      });
+    }
+    console.log('✅ Mixpanel initialized');
+  }, [])
 
   return (
     <main className="p-4 md:p-6 space-y-6">
